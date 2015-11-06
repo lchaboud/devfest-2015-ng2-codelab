@@ -34,11 +34,11 @@ function transformPath() {
 var DEST_FOLDER = '__build__';
 var serverport = 3000;
 var paths = {
-  
+
   config: {
     tsconfig: root('src/tsconfig.json')
   },
-  
+
   dest: {
     folder: root(DEST_FOLDER),
     vendor: root(DEST_FOLDER + '/vendor'),
@@ -47,7 +47,7 @@ var paths = {
     styles: root(DEST_FOLDER + '/styles'),
     test: root('test')
   },
-  
+
   src: {
     everything: root('src/app/**'),
     index: root('src/app/index.html'),
@@ -75,21 +75,21 @@ var paths = {
       'node_modules/reflect-metadata/Reflect.js',
       'node_modules/reflect-metadata/Reflect.js.map',
       'node_modules/systemjs/dist/system.src.js',
-      
+
       'node_modules/angular2/bundles/angular2.dev.js',
       'node_modules/angular2/bundles/router.dev.js',
       'node_modules/angular2/bundles/http.dev.js',
 
       'node_modules/chance/dist/chance.min.js',
-      
+
       'bower_components/material-design-lite/material.js',
-      'bower_components/material-design-lite/material.css',      
-      
+      'bower_components/material-design-lite/material.css',
+
       'src/app/styles/app.css',
       'src/app/system.config.js'
     ]
   },
-  
+
   clean: {
     dev: DEST_FOLDER,
     app: rootDir([
@@ -164,7 +164,7 @@ gulp.task('build:typescript', function () {
 });
 
 gulp.task('build:html', function () {
-  
+
   return gulp.src(paths.src.html)
     .pipe(gulp.dest(paths.dest.folder))
     .pipe(browserSync.stream());
@@ -179,7 +179,7 @@ gulp.task('build:styles', function () {
 gulp.task('build:index', function () {
   var target = gulp.src(paths.src.index);
   var sources = gulp.src(paths.src.vendor, { read: false, relative: true});
-  
+
   return target.pipe($.inject(sources, {transform: transformPath()}))
     .pipe(gulp.dest(paths.dest.folder))
     .pipe(browserSync.stream());
@@ -194,7 +194,7 @@ gulp.task('build:app', function (done) {
 });
 
 gulp.task('build', function (done) {
-  runSequence('clean', 'build:app', 'build:vendor', done);
+  runSequence('build:app', 'build:vendor', done);
 });
 
 // Post install (NPM lifecycle)
@@ -212,7 +212,7 @@ gulp.task('postinstall', function (done) {
 // Serve dev.
 
 gulp.task('serve', ['build'], function () {
-  
+
   browserSync.init({
     port: serverport,
     watchOptions: {
@@ -231,11 +231,11 @@ gulp.task('serve', ['build'], function () {
       baseDir: DEST_FOLDER
     }
   });
-  
+
   gulp.watch(paths.src.ts, ['build:typescript']);
   gulp.watch(paths.src.styles, ['build:styles']);
   gulp.watch(paths.src.vendor, ['build:vendor']);
   gulp.watch(paths.src.index, ['build:index']);
   gulp.watch(paths.src.html, ['build:html']);
-    
+
 });
